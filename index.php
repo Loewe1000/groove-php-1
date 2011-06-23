@@ -306,11 +306,12 @@ elseif ($_GET['rm'] == 1)
 echo "<div>
 <div style='font-family:Ubuntu;font-size:30pt;'><center>Delete:</center></div>
 ";
+$ip = $_SERVER['SERVER_ADDR'];
 if ($handle = opendir('Songs')) {
 while (false !== ($file = readdir($handle))) {
 if ($file != "." && $file != "..") {
 $gro = filesize('Songs/'.$file);
-echo "$file, $gro<br />";
+echo "<a href='http://".$ip."/Songs/".$file."'>$file</a>".", $gro<br />";
 }
 }
 closedir($handle);

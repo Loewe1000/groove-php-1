@@ -11,6 +11,7 @@
 <meta content="yes" name="apple-mobile-web-app-capable" /> 
 <meta content="text/html;" http-equiv="Content-Type" /> 
 <meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" /> 
+<title>Groove-PHP</title>
 <style type="text/css">
 footer {
 border-bottom-left-radius: 10px;

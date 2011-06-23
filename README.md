@@ -5,7 +5,7 @@
    * php 
    * php5-curl
    * Webserver
-2.1 Requirement for iOS Devices:
+3. Requirement for iOS Devices:
    * Openssh
    * curl
    * lighttpd

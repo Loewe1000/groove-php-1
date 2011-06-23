@@ -165,6 +165,16 @@ return $hex2.sha1($method.":".$token.":quitStealinMahShit:".$hex2);
 
 if($_POST['search'] AND $_POST['search'] != NULL)
 {
+$text = htmlentities($_POST['searchvalue']);
+echo "<center><div style='padding-top:10px;padding-bottom:10px;border-bottom:thin black solid;'>
+<form action='' method='POST'>
+<input type='text' name='searchvalue' value='$text' x-webkit-speech />
+<input type='hidden' name='search' value='1'>
+<input type='Submit' value='Search !'><br />
+<a href='?rm=1'>DELETE:</a>
+</form>
+</div></center>";
+
 //get Search Results EX ! /* Starts here */
     $s["header"] = $h;
     $s["header"]["clientRevision"] = "20101222";

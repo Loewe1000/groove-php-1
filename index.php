@@ -255,7 +255,6 @@ $file4 = file_get_contents('http://grooveshark.com/more.php?getStreamKeyFromSong
 
 mkdir("Songs", 0777);
 $Name = $_POST['DownloadName'];
-$ip = $_SERVER['SERVER_ADDR'];
 // This must not be Curl, but it's easier and cooler with curl :)
 	$keys = json_decode($file4);
 	$streamKey = $keys->result->streamKey;
@@ -271,6 +270,7 @@ $ip = $_SERVER['SERVER_ADDR'];
   	curl_close($ch);
 	fclose($fp);
 
+$ip = $_SERVER['SERVER_ADDR'];
 // Ok, Download Complete, let's creat a simple m3u
 $file = 'Songs/my.m3u';
 $current = file_get_contents($file);

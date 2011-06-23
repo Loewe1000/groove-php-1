@@ -211,14 +211,21 @@ $Album = $file2->result->result[$i-1]->AlbumName;
 $Song = $file2->result->result[$i-1]->SongName;
 if ($Cover != NULL)
 {
-echo "<img style='float:left' src='http://beta.grooveshark.com/static/amazonart/$Cover' align='top' height='70px' width='70px' /><div style='padding:10px;'>Artist: $Artist <br/>
+echo "<br /> <img style='float:left' src='http://beta.grooveshark.com/static/amazonart/$Cover' align='top' height='70px' width='70px' /><div style='paddin-left:10px;'>Artist: $Artist <br/>
 			     Album: $Album <br/>
 			     Song: $Song
+			     </div>
+			     <div>
 			     <form action='' method='POST'> 
 			     <input type='hidden' name='download' value='1'>
 			     <input type='hidden' name='SongID' value='$SongID'>		     
 			     <input type='hidden' name='Song' value='$Song'>
-			     <div style='align:right'><input type='Submit' value='Download'></div></div>";
+			     <div style='align:right'><input type='Submit' value='Download !'></form></div>
+			     <form action='' method='POST'> 
+			     <input type='hidden' name='ArtistSearch' value='1'>
+			     <input type='hidden' name='ArtistID' value='$ArtistID'>		     
+			     <input type='hidden' name='Artist' value='$Artist'>
+			     <div style='align:right'><input type='Submit' value='More Songs from Artist !'></form></div></div><br />";
 }
 elseif ($Song != NULL)
 {
@@ -226,7 +233,12 @@ echo "<br /><div style='padding-left:10px;'><form action='' method='POST'>Artist
 			     <input type='hidden' name='download' value='1'>
 			     <input type='hidden' name='SongID' value='$SongID'>
 			     <input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>
-			     <div style=';align:right'><input  type='Submit' value='Download'></div></form></div><br />";
+			     <div style=';align:right'><input  type='Submit' value='Download'></div></form>
+			     <form action='' method='POST'> 
+			     <input type='hidden' name='ArtistSearch' value='1'>
+			     <input type='hidden' name='ArtistID' value='$ArtistID'>		     
+			     <input type='hidden' name='Artist' value='$Artist'>
+			     <div style='align:right'><input type='Submit' value='More Songs from Artist !'></form></div></div><br />";
 }
 $i++;
 }
@@ -237,7 +249,7 @@ $i++;
 
 
 /* Starts here */
-elseif($_POST['download'])
+elseif($_POST['download'] and $_POST['SongID'] != NULL)
 {
     $ps["parameters"]["mobile"] = "false";
     $ps["parameters"]["prefetch"] = "false";
@@ -263,7 +275,10 @@ $optst = array(
 $contextss = stream_context_create($optst);
 $file4 = file_get_contents('http://grooveshark.com/more.php?getStreamKeyFromSongIDEx', false, $contextss);
 
+if (mkdir("Songs", 0777))
+{
 mkdir("Songs", 0777);
+}
 $Name = $_POST['DownloadName'];
 // This must not be Curl, but it's easier and cooler with curl :)
 	$keys = json_decode($file4);
@@ -343,7 +358,66 @@ File ? <input type="text" name="File">
 }
 echo "</div>";
 }
-elseif ($_POST['search'] == false OR $_POST['search'] == NULL)
+elseif($_POST['ArtistSearch'] and $_POST['ArtistID'] != NULL)
+{
+    $p["parameters"]["artistID"] = $_POST['ArtistID'];
+    $p["parameters"]["isVerifiedOrPopular"] = 'isVerified';
+    $p["header"] = $h;
+    $p["header"]["client"] = "htmlshark";
+    $p["header"]["clientRevision"] = "20101222";
+    $p["header"]["token"] = prep_token("artistGetSongsEx",$token);
+    $p["method"] = "artistGetSongsEx";
+
+$opts = array(
+  'http'=>array(
+    'method'=>"POST",
+    'header'=>"User-Agent: $Useragent\r\n" .
+              "Referer: $Referer\r\n".
+	      "Cookie: PHPSESSID=$id\r\n".
+	      "Content-Type: application/json\r\n",
+   'content'=> "".json_encode($p).""
+  )
+);
+
+$context = stream_context_create($opts);
+$file = file_get_contents('http://grooveshark.com/more.php', false, $context);
+$decode = json_decode($file);
+
+
+while ($i < 11)
+{
+$ArtistID = $decode->result[$i-1]->ArtistID;
+$SongID = $decode->result[$i-1]->SongID;
+$Cover = $decode->result[$i-1]->CoverArtFilename;
+$Artist = $decode->result[$i-1]->ArtistName;
+$Album = $decode->result[$i-1]->AlbumName;
+$Song = $decode->result[$i-1]->Name;
+
+if ($Cover != NULL)
+{
+echo "<br /> <img style='float:left' src='http://beta.grooveshark.com/static/amazonart/$Cover' align='top' height='70px' width='70px' /><div style=''>Artist: $Artist <br/>
+			     Album: $Album <br/>
+			     Song: $Song
+			     <div>
+			     <form action='' method='POST'> 
+			     <input type='hidden' name='download' value='1'>
+			     <input type='hidden' name='SongID' value='$SongID'>		     
+			     <input type='hidden' name='Song' value='$Song'>
+			     <div style='align:right'><input type='Submit' value='Download !'></form></div>
+			     </div><br />";
+}
+elseif ($Song != NULL)
+{
+echo "<br /><div style='padding-left:10px;padding-bottom:10px;'><form action='' method='POST'>Artist: $Artist - Album: $Album - Song: $Song 
+			     <input type='hidden' name='download' value='1'>
+			     <input type='hidden' name='SongID' value='$SongID'>
+			     <input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>
+			     <div style=';align:right'><input  type='Submit' value='Download'></div></form></div>";
+}
+$i++;
+}
+}
+elseif ($_POST['search'] == false OR $_POST['search'] == NULL OR $_POST['ArtistSearch'] == false)
 {
 echo '<form method="POST" action="">
 <!-- Just for fun -->
@@ -352,6 +426,10 @@ echo '<form method="POST" action="">
 <input type="Submit" value="Search !"></div><br />
 <a href="?rm=1">DELETE:</a>
 </center>';
+}
+else
+{
+echo "<pre> Sorry, not found </pre>";
 }
 ?>
 </section>

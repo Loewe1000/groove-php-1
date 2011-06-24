@@ -301,7 +301,7 @@ $ip = $_SERVER['SERVER_ADDR'];
 // Ok, Download Complete, let's creat a simple m3u
 $file = 'Songs/my.m3u';
 $current = file_get_contents($file);
-$current .= "http://".$ip."/Songs/".$Name.".mp3 \n";
+$current .= "Songs/".$Name.".mp3 \n";
 file_put_contents($file, $current);
 echo "<center>
 <div style='padding-bottom:10px;font-family:Ubuntu;font-size:20pt;'>
@@ -316,12 +316,12 @@ As a Stream:<br />
 
 <div style='font-family:Ubuntu; font-size:12pt;'>
 As a Link: <br />
-<a href='http://".$ip."/Songs/".$Name.".mp3'>Download</a>
+<a href='Songs/".$Name.".mp3'>Download</a>
 </div>
 
 <div style='font-family:Ubuntu; font-size:12pt;'>
 Or a m3u with all Songs, you've downloaded: <br />
-<a href='http://".$ip."/Songs/my.m3u'>Download</a>
+<a href='Songs/my.m3u'>Download</a>
 </div>
 
 </div>

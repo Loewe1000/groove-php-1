@@ -219,6 +219,7 @@ echo "<br /> <img style='float:left' src='http://beta.grooveshark.com/static/ama
 			     <div>
 			     <form action='' method='POST'> 
 			     <input type='hidden' name='download' value='1'>
+			     <input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>
 			     <input type='hidden' name='SongID' value='$SongID'>		     
 			     <input type='hidden' name='Song' value='$Song'>
 			     <div style='align:right'><input type='Submit' value='Download !'></form></div>
@@ -276,11 +277,11 @@ $optst = array(
 $contextss = stream_context_create($optst);
 $file4 = file_get_contents('http://grooveshark.com/more.php?getStreamKeyFromSongIDEx', false, $contextss);
 
-if (mkdir("Songs", 0777))
+if (is_dir("Songs") == false)
 {
 mkdir("Songs", 0777);
 }
-$Name = $_POST['DownloadName'];
+	$Name = $_POST['DownloadName'];
 // This must not be Curl, but it's easier and cooler with curl :)
 	$keys = json_decode($file4);
 	$streamKey = $keys->result->streamKey;
@@ -402,7 +403,8 @@ echo "<br /> <img style='float:left' src='http://beta.grooveshark.com/static/ama
 			     <div>
 			     <form action='' method='POST'> 
 			     <input type='hidden' name='download' value='1'>
-			     <input type='hidden' name='SongID' value='$SongID'>		     
+			     <input type='hidden' name='SongID' value='$SongID'>
+			     <input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>		     
 			     <input type='hidden' name='Song' value='$Song'>
 			     <div style='align:right'><input type='Submit' value='Download !'></form></div>
 			     </div><br />";

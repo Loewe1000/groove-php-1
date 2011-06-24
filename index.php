@@ -338,7 +338,7 @@ if ($handle = opendir('Songs')) {
 while (false !== ($file = readdir($handle))) {
 if ($file != "." && $file != "..") {
 $gro = filesize('Songs/'.$file);
-echo "<a href='http://".$ip."/Songs/".$file."'>$file</a>".", $gro<br />";
+echo "<a href='Songs/".$file."'>$file</a>".", $gro<br />";
 }
 }
 closedir($handle);

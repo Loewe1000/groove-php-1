@@ -6,6 +6,7 @@
    * php 
    * php5-curl
    * Webserver
+   * php5-cli //Important for background download
 3. Requirement for iOS Devices:
    * Openssh
    * curl

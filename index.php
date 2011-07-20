@@ -132,7 +132,7 @@ $h["Country"]["ID"] = "1";
     $p["parameters"]["secretKey"] = $secretKey;
     $p["header"] = $h;
     $p["header"]["client"] = "htmlshark";
-    $p["header"]["clientRevision"] = "20101222.35";
+    $p["header"]["clientRevision"] = "20110606";
 
 
 
@@ -156,11 +156,11 @@ $token = $decode->result;
 
 
 //prepToken! fixed :)
-function prep_token($method,$token)
+function prep_token($method,$token,$with)
 {
 $obj = new randomColorGenerator();
 $hex2 = $obj -> getColor();
-return $hex2.sha1($method.":".$token.":quitStealinMahShit:".$hex2);
+return $hex2.sha1($method.":".$token.$with.$hex2);
 }
 
 
@@ -178,8 +178,8 @@ echo "<center><div style='padding-top:10px;padding-bottom:10px;border-bottom:thi
 
 //get Search Results EX ! /* Starts here */
     $s["header"] = $h;
-    $s["header"]["clientRevision"] = "20101222";
-    $s["header"]["token"] = prep_token("getSearchResultsEx",$token);
+    $s["header"]["clientRevision"] = "20110606";
+    $s["header"]["token"] = prep_token("getSearchResultsEx",$token,":backToTheScienceLab:");
     $s["header"]["client"] = "htmlshark";
     $s["method"] = "getSearchResultsEx";
     $s["parameters"]["type"] = "Songs";
@@ -259,8 +259,8 @@ elseif($_POST['download'] and $_POST['SongID'] != NULL)
     $ps["parameters"]["country"] = $h["Country"];
     $ps["header"] = $h;
     $ps["header"]["client"] = "jsqueue";
-    $ps["header"]["clientRevision"] = "20101012.37";
-    $ps["header"]["token"] = prep_token("getStreamKeyFromSongIDEx",$token);
+    $ps["header"]["clientRevision"] = "20110606";
+    $ps["header"]["token"] = prep_token("getStreamKeyFromSongIDEx",$token,":bewareOfBearsharktopus:");
     $ps["method"] = "getStreamKeyFromSongIDEx";
 
 $optst = array(
@@ -287,6 +287,7 @@ mkdir("Songs", 0777);
 	$streamKey = $keys->result->streamKey;
 	$ip = $keys->result->ip;
 
+
   	$ch = curl_init();
 	$fp = fopen('Songs/'.$Name.'.mp3', "w");
 	curl_setopt($ch, CURLOPT_FILE, $fp);  	
@@ -297,11 +298,12 @@ mkdir("Songs", 0777);
   	curl_close($ch);
 	fclose($fp);
 
+
 $ip = $_SERVER['SERVER_ADDR'];
 // Ok, Download Complete, let's creat a simple m3u
 $file = 'Songs/my.m3u';
 $current = file_get_contents($file);
-$current .= "Songs/".$Name.".mp3 \n";
+$current .= 'http://'.$_SERVER["HTTP_HOST"]."/Songs/".$Name.".mp3\n";
 file_put_contents($file, $current);
 echo "<center>
 <div style='padding-bottom:10px;font-family:Ubuntu;font-size:20pt;'>
@@ -367,7 +369,7 @@ elseif($_POST['ArtistSearch'] and $_POST['ArtistID'] != NULL)
     $p["header"] = $h;
     $p["header"]["client"] = "htmlshark";
     $p["header"]["clientRevision"] = "20101222";
-    $p["header"]["token"] = prep_token("artistGetSongsEx",$token);
+    $p["header"]["token"] = prep_token("artistGetSongsEx",$token,":backToTheScienceLab:");
     $p["method"] = "artistGetSongsEx";
 
 $opts = array(

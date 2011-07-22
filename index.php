@@ -281,7 +281,7 @@ if (is_dir("Songs") == false)
 {
 mkdir("Songs", 0777);
 }
-	$Name = $_POST['DownloadName'];
+	$Name = "".$_POST['DownloadName']."";
 // This must not be Curl, but it's easier and cooler with curl :)
 	$keys = json_decode($file4);
 	$streamKey = $keys->result->streamKey;
@@ -368,7 +368,7 @@ elseif($_POST['ArtistSearch'] and $_POST['ArtistID'] != NULL)
     $p["parameters"]["isVerifiedOrPopular"] = 'isVerified';
     $p["header"] = $h;
     $p["header"]["client"] = "htmlshark";
-    $p["header"]["clientRevision"] = "20101222";
+    $p["header"]["clientRevision"] = "20110606";
     $p["header"]["token"] = prep_token("artistGetSongsEx",$token,":backToTheScienceLab:");
     $p["method"] = "artistGetSongsEx";
 

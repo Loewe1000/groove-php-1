@@ -166,7 +166,7 @@ return $hex2.sha1($method.":".$token.$with.$hex2);
 
 if($_POST['search'] AND $_POST['search'] != NULL)
 {
-$text = htmlentities($_POST['searchvalue']);
+$text = htmlentities(utf8_decode($_POST['searchvalue']));
 echo "<center><div style='padding-top:10px;padding-bottom:10px;border-bottom:thin black solid;'>
 <form action='' method='POST'>
 <input type='text' name='searchvalue' value='$text' x-webkit-speech />
@@ -183,7 +183,7 @@ echo "<center><div style='padding-top:10px;padding-bottom:10px;border-bottom:thi
     $s["header"]["client"] = "htmlshark";
     $s["method"] = "getSearchResultsEx";
     $s["parameters"]["type"] = "Songs";
-    $s["parameters"]["query"] = $_POST['searchvalue'];
+    $s["parameters"]["query"] = "".$_POST['searchvalue']."";
 
 
 

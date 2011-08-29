@@ -18,14 +18,9 @@ Front end and Design for this Version came from Loewe :D
    * lighttpd
    * php
 4. Screenshot:
-1:
-![0.1](https://github.com/check/groove-php/raw/master/screenshot/loewe.png)
-2:
 ![0.1](https://github.com/check/groove-php/raw/master/screenshot/loewe2.png)
-3:
-![0.1]https://github.com/check/groove-php/raw/master/screenshot/loewe3.png
 
 
 
 Old:
-https://raw.github.com/check/groove-php/master/screenshot/screenshot.PNG
+![0.0.1](https://raw.github.com/check/groove-php/master/screenshot/screenshot.PNG)

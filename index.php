@@ -1,4 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<?php
+session_start();
+if ($_POST['settings'] == 'apply') {
+$_SESSION['results'] = $_POST['results'];
+}
+$results = $_SESSION['results'];
+if ($results == '') {
+$results = 10;
+}
+$ID = $_POST['SongID'];
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"> 
  
 <head> 
@@ -7,39 +19,27 @@
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Calligraffitti">
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin"> 
 <link href="http://fonts.googleapis.com/css?family=Cabin+Sketch:bold" rel="stylesheet" type="text/css" > 
+<link href="css/style.css" rel="stylesheet" media="screen" type="text/css" />
 <META http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <meta content="yes" name="apple-mobile-web-app-capable" /> 
 <meta content="text/html;" http-equiv="Content-Type" /> 
 <meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" /> 
 <title>Groove-PHP</title>
-<style type="text/css">
-footer {
-border-bottom-left-radius: 10px;
-border-bottom-right-radius: 10px;
-border: thin black solid;
-}
-#haupt {
-border-left: thin black solid;
-border-right: thin black solid;
-}
-header {
-text-align:center;
-border-top-left-radius: 10px;
-border-top-right-radius: 10px;
-border: thin black solid;
-}
-#title {
-font-size:20 pt;
-font-family: 'Cabin Sketch';font-family:VT323;
-}
-</style>
 </head>
 <body>
-<header onclick="self.location.href = 'index.php'">
-<img src="images/Grooveshark.png" height="128px" width="128px" /><br />
-<div id="title">We got the groove, you got the shark!</div>
-</header>
-<section id="haupt"> 
+<div id="topbar" onclick="self.location.href = 'index.php'">
+<?php
+if ($_GET['settings'] == '1' or $ID != '' or $_GET['rm'] == '1') {
+echo "<div id='leftnav'><a href='index.php'><img alt='home' src='images/home.png' /></a></div>";
+}
+if ($_GET['rm'] != '1' and $_GET['settings'] != '1' and $ID == '') {
+echo "<div id='leftbutton'><a href='index.php?rm=1'>songs</a></div>";
+}
+if ($_GET['settings'] != '1'){
+echo "<div id='rightbutton'><a href='index.php?settings=1'>settings</a></div>";
+}
+?>
+</div>
 <?php
 /*
 Ported Python Version to PHP by Check
@@ -55,52 +55,52 @@ by George Stephanos <gaf.stephanos@gmail.com>
 // HEX
 class randomColorGenerator
     {
-        private $hexColor = array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F");
-        private $newColor = "";
-        private $colorBag = array();
-        function getColor()
-        {
-            $this->newColor=    $this->hexColor[$this->genRandom()].
-                                $this->hexColor[$this->genRandom()].
-                                $this->hexColor[$this->genRandom()].
-                                $this->hexColor[$this->genRandom()].
-                                $this->hexColor[$this->genRandom()].
-                                $this->hexColor[$this->genRandom()];
-                                
-            if(!in_array($this->newColor,$this->colorBag))
-            {
-                $this->colorBag[] = $this->newColor;
-                return $this->newColor;
-            }
-        }
-        function genRandom()
-        {
-            srand((float) microtime() * 10000000);
-            $random_col_keys = array_rand($this->hexColor, 2);
-            return $random_col_keys[0];
-        }
+	private $hexColor = array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F");
+	private $newColor = "";
+	private $colorBag = array();
+	function getColor()
+	{
+	    $this->newColor=	$this->hexColor[$this->genRandom()].
+				$this->hexColor[$this->genRandom()].
+				$this->hexColor[$this->genRandom()].
+				$this->hexColor[$this->genRandom()].
+				$this->hexColor[$this->genRandom()].
+				$this->hexColor[$this->genRandom()];
+				
+	    if(!in_array($this->newColor,$this->colorBag))
+	    {
+		$this->colorBag[] = $this->newColor;
+		return $this->newColor;
+	    }
+	}
+	function genRandom()
+	{
+	    srand((float) microtime() * 10000000);
+	    $random_col_keys = array_rand($this->hexColor, 2);
+	    return $random_col_keys[0];
+	}
     }
 
 // Generate UUID
 function gen_uuid() {
     return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        // 32 bits for "time_low"
-        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+	// 32 bits for "time_low"
+	mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
 
-        // 16 bits for "time_mid"
-        mt_rand( 0, 0xffff ),
+	// 16 bits for "time_mid"
+	mt_rand( 0, 0xffff ),
 
-        // 16 bits for "time_hi_and_version",
-        // four most significant bits holds version number 4
-        mt_rand( 0, 0x0fff ) | 0x4000,
+	// 16 bits for "time_hi_and_version",
+	// four most significant bits holds version number 4
+	mt_rand( 0, 0x0fff ) | 0x4000,
 
-        // 16 bits, 8 bits for "clk_seq_hi_res",
-        // 8 bits for "clk_seq_low",
-        // two most significant bits holds zero and one for variant DCE1.1
-        mt_rand( 0, 0x3fff ) | 0x8000,
+	// 16 bits, 8 bits for "clk_seq_hi_res",
+	// 8 bits for "clk_seq_low",
+	// two most significant bits holds zero and one for variant DCE1.1
+	mt_rand( 0, 0x3fff ) | 0x8000,
 
-        // 48 bits for "node"
-        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+	// 48 bits for "node"
+	mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
     );
 }
 
@@ -127,7 +127,7 @@ $h["Country"]["ID"] = "1";
 
 
 
-// Get a Token  /* Started here */
+// Get a Token	/* Started here */
     $p["method"] = "getCommunicationToken";
     $p["parameters"]["secretKey"] = $secretKey;
     $p["header"] = $h;
@@ -140,7 +140,7 @@ $opts = array(
   'http'=>array(
     'method'=>"POST",
     'header'=>"User-Agent: $Useragent\r\n" .
-              "Referer: $Referer\r\n".
+	      "Referer: $Referer\r\n".
 	      "Cookie: PHPSESSID=$id\r\n".
 	      "Content-Type: application/json\r\n",
    'content'=> "".json_encode($p).""
@@ -167,14 +167,16 @@ return $hex2.sha1($method.":".$token.$with.$hex2);
 if($_POST['search'] AND $_POST['search'] != NULL)
 {
 $text = htmlentities(utf8_decode($_POST['searchvalue']));
-echo "<center><div style='padding-top:10px;padding-bottom:10px;border-bottom:thin black solid;'>
-<form action='' method='POST'>
-<input type='text' name='searchvalue' value='$text' x-webkit-speech />
+echo "<div class='searchbox'>
+<form action='' method='post'>
+<fieldset><input id='search' name='searchvalue' value='$text' placeholder='search' type='text' x-webkit-speech/>
+<input id='submit' type='hidden' /></fieldset>
 <input type='hidden' name='search' value='1'>
-<input type='Submit' value='Search !'><br />
-<a href='?rm=1'>DELETE:</a>
 </form>
-</div></center>";
+</div>
+<body class='list'>
+<div id='content'>
+<ul><li class='title'>results</li>";
 
 //get Search Results EX ! /* Starts here */
     $s["header"] = $h;
@@ -191,7 +193,7 @@ $option = array(
   'http'=>array(
     'method'=>"POST",
     'header'=>"User-Agent: $Useragent\r\n" .
-              "Referer: http://grooveshark.com/\r\n".
+	      "Referer: http://grooveshark.com/\r\n".
 	      "Cookie: PHPSESSID=$id\r\n".
 	      "Content-Type: application/json\r\n",
    'content'=> "".json_encode($s).""
@@ -201,8 +203,7 @@ $option = array(
 $contexts = stream_context_create($option);
 $file2 = file_get_contents('http://grooveshark.com/more.php?getSearchResultsEx', false, $contexts);
 $file2 = json_decode($file2);
-
-while ($i < 11)
+while ($i <= $results)
 {
 $ArtistID = $file2->result->result[$i-1]->ArtistID;
 $SongID = $file2->result->result[$i-1]->SongID;
@@ -210,41 +211,47 @@ $Cover = $file2->result->result[$i-1]->CoverArtFilename;
 $Artist = $file2->result->result[$i-1]->ArtistName;
 $Album = $file2->result->result[$i-1]->AlbumName;
 $Song = $file2->result->result[$i-1]->SongName;
+if ($Song != NULL)
+{
 if ($Cover != NULL)
 {
-echo "<br /> <img style='float:left' src='http://beta.grooveshark.com/static/amazonart/$Cover' align='top' height='70px' width='70px' /><div style='paddin-left:10px;'>Artist: $Artist <br/>
-			     Album: $Album <br/>
-			     Song: $Song
-			     </div>
-			     <div>
-			     <form action='' method='POST'> 
-			     <input type='hidden' name='download' value='1'>
-			     <input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>
-			     <input type='hidden' name='SongID' value='$SongID'>		     
-			     <input type='hidden' name='Song' value='$Song'>
-			     <div style='align:right'><input type='Submit' value='Download !'></form></div>
-			     <form action='' method='POST'> 
-			     <input type='hidden' name='ArtistSearch' value='1'>
-			     <input type='hidden' name='ArtistID' value='$ArtistID'>		     
-			     <input type='hidden' name='Artist' value='$Artist'>
-			     <div style='align:right'><input type='Submit' value='More Songs from Artist !'></form></div></div><br />";
+$Cover = "http://beta.grooveshark.com/static/amazonart/$Cover";
 }
-elseif ($Song != NULL)
-{
-echo "<br /><div style='padding-left:10px;'><form action='' method='POST'>Artist: $Artist - Album: $Album - Song: $Song 
-			     <input type='hidden' name='download' value='1'>
-			     <input type='hidden' name='SongID' value='$SongID'>
-			     <input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>
-			     <div style=';align:right'><input  type='Submit' value='Download'></div></form>
-			     <form action='' method='POST'> 
-			     <input type='hidden' name='ArtistSearch' value='1'>
-			     <input type='hidden' name='ArtistID' value='$ArtistID'>		     
-			     <input type='hidden' name='Artist' value='$Artist'>
-			     <div style='align:right'><input type='Submit' value='More Songs from Artist !'></form></div></div><br />";
+else {
+$Cover = "images/nocover.jpg";
+}
+echo"
+<li class='withimage'>
+<a class='noeffect' href='javascript:document.getElementById(\"$SongID\").style.visibility = \"visible\";document.getElementById(\"$SongID\").style.display = \"block\"'>
+<img src='$Cover'/>
+<span class='name'>$Song - $Artist</span>
+<span class='comment'>$Album</span>Test
+<span class='arrow'></span></a></li>
+<div id='$SongID' style='visibility:hidden;display:none;'>
+<a href='javascript:document.getElementById(\"$SongID\").style.visibility = \"hidden\";document.getElementById(\"$SongID\").style.display = \"none\"'>
+<div style='background:rgba(0,0,0,0.9);position:absolute;width:100%;height:91px;margin-top:-91px;z-index:1;'>
+<center>
+<form action='' method='POST'> 
+<input type='hidden' name='download' value='1'>
+<input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>
+<input type='hidden' name='SongID' value='$SongID'>			
+<input type='hidden' name='Song' value='$Song'>
+<input type='submit' style='margin-top:20px;' value='Download'>
+</form>
+<form action='' method='POST'> 
+<input type='hidden' name='ArtistSearch' value='1'>
+<input type='hidden' name='ArtistID' value='$ArtistID'>		     
+<input type='hidden' name='Artist' value='$Artist'>
+<input type='Submit' value='More Songs from $Artist'></form>
+</center>
+</div>
+</a>
+</div>
+";
 }
 $i++;
 }
-
+echo "</ul></body>";
 }
 /* Ends Here */
 
@@ -267,7 +274,7 @@ $optst = array(
   'http'=>array(
     'method'=>"POST",
     'header'=>"User-Agent: $Useragent\r\n" .
-              "Referer: $Referer\r\n".
+	      "Referer: $Referer\r\n".
 	      "Cookie: PHPSESSID=$id\r\n".
 	      "Content-Type: application/json\r\n",
    'content'=> "".json_encode($ps).""
@@ -288,79 +295,61 @@ mkdir("Songs", 0777);
 	$ip = $keys->result->ip;
 
 
-  	$ch = curl_init();
+	$ch = curl_init();
 	$fp = fopen('Songs/'.$Name.'.mp3', "w");
-	curl_setopt($ch, CURLOPT_FILE, $fp);  	
+	curl_setopt($ch, CURLOPT_FILE, $fp);	
 	curl_setopt($ch,CURLOPT_URL,'http://'.$ip.'/stream.php');
-  	curl_setopt($ch,CURLOPT_POST, true);
-  	curl_setopt($ch,CURLOPT_POSTFIELDS, "streamKey=$streamKey");
-  	curl_exec($ch);
-  	curl_close($ch);
+	curl_setopt($ch,CURLOPT_POST, true);
+	curl_setopt($ch,CURLOPT_POSTFIELDS, "streamKey=$streamKey");
+	curl_exec($ch);
+	curl_close($ch);
 	fclose($fp);
 
 
 $ip = $_SERVER['SERVER_ADDR'];
-// Ok, Download Complete, let's creat a simple m3u
-$file = 'Songs/my.m3u';
-$current = file_get_contents($file);
-$current .= 'http://'.$_SERVER["HTTP_HOST"]."/Songs/".$Name.".mp3\n";
-file_put_contents($file, $current);
-echo "<center>
-<div style='padding-bottom:10px;font-family:Ubuntu;font-size:20pt;'>
-How to Download?
-<br />
-<div style='font-family:Ubuntu; font-size:12pt;'>
-As a Stream:<br />
-<audio controls='controls'>
-<source src='Songs/".$Name.".mp3' type='audio/mpeg' /> 
-</audio>
-</div>
-
-<div style='font-family:Ubuntu; font-size:12pt;'>
-As a Link: <br />
-<a href='Songs/".$Name.".mp3'>Download</a>
-</div>
-
-<div style='font-family:Ubuntu; font-size:12pt;'>
-Or a m3u with all Songs, you've downloaded: <br />
-<a href='Songs/my.m3u'>Download</a>
-</div>
-
-</div>
-</center>";
+echo "
+<div id='content'>
+<ul class='pageitem'>
+<li class='textbox'>
+<b>$Name</b>
+<span class='header'>stream</span>
+<audio controls='controls'><source src='Songs/".$Name.".mp3' type='audio/mpeg' /> </audio>
+<span class='header'>download</span>
+<a href='Songs/".$Name.".mp3'>".$Name.".mp3</a>
+</li>
+</ul>
+</div>";
 /* Ends Here */
 }
 elseif ($_GET['rm'] == 1)
 {
-echo "<div>
-<div style='font-family:Ubuntu;font-size:30pt;'><center>Delete:</center></div>
-";
 $ip = $_SERVER['SERVER_ADDR'];
+echo "
+<div id='content'>
+<ul class='pageitem'>
+<li class='textbox'>";
 if ($handle = opendir('Songs')) {
 while (false !== ($file = readdir($handle))) {
 if ($file != "." && $file != "..") {
-$gro = filesize('Songs/'.$file);
-echo "<a href='Songs/".$file."'>$file</a>".", $gro<br />";
+echo "<b><a style='float:left;' href='Songs/".$file."'>$file</a>
+<form action='' method='Post'>
+<input type='hidden' value='$file' name='File'>
+<input type='hidden' value='1' name='rm'>
+<input type='hidden' value='1' name='g'>
+<input type='image' style='float:left;margin:0;' name='bubmit' src='images/delete.png'>
+</b><br style='both:clear;'/>";
 }
 }
 closedir($handle);
 }
-if($_GET['g'] == 1)
+echo "</li>
+</ul>
+</div>";
+if($_POST['g'] == 1)
 {
-$File = $_GET['File'];
+$File = $_POST['File'];
 $unlink = unlink('Songs/'.$File);
 }
-else
-{
-echo '
-<form action="" method="GET">
-File ? <input type="text" name="File">
-<input type="hidden" value="1" name="rm">
-<input type="hidden" value="1" name="g"> <br />
-<input type="Submit" value="Submit">
-';
-}
-echo "</div>";
 }
 elseif($_POST['ArtistSearch'] and $_POST['ArtistID'] != NULL)
 {
@@ -376,7 +365,7 @@ $opts = array(
   'http'=>array(
     'method'=>"POST",
     'header'=>"User-Agent: $Useragent\r\n" .
-              "Referer: $Referer\r\n".
+	      "Referer: $Referer\r\n".
 	      "Cookie: PHPSESSID=$id\r\n".
 	      "Content-Type: application/json\r\n",
    'content'=> "".json_encode($p).""
@@ -387,8 +376,18 @@ $context = stream_context_create($opts);
 $file = file_get_contents('http://grooveshark.com/more.php', false, $context);
 $decode = json_decode($file);
 
-
-while ($i < 11)
+$showartist = $_POST['ArtistSearch'];
+echo "<div class='searchbox'>
+<form action='' method='post'>
+<fieldset><input id='search' name='searchvalue' value='$text' placeholder='search' type='text' x-webkit-speech/>
+<input id='submit' type='hidden' /></fieldset>
+<input type='hidden' name='search' value='1'>
+</form>
+</div>
+<body class='list'>
+<div id='content'>
+<ul><li class='title'>More results</li>";
+while ($i <= $results)
 {
 $ArtistID = $decode->result[$i-1]->ArtistID;
 $SongID = $decode->result[$i-1]->SongID;
@@ -397,53 +396,88 @@ $Artist = $decode->result[$i-1]->ArtistName;
 $Album = $decode->result[$i-1]->AlbumName;
 $Song = $decode->result[$i-1]->Name;
 
+if ($Song != NULL)
+{
 if ($Cover != NULL)
 {
-echo "<br /> <img style='float:left' src='http://beta.grooveshark.com/static/amazonart/$Cover' align='top' height='70px' width='70px' /><div style=''>Artist: $Artist <br/>
-			     Album: $Album <br/>
-			     Song: $Song
-			     <div>
-			     <form action='' method='POST'> 
-			     <input type='hidden' name='download' value='1'>
-			     <input type='hidden' name='SongID' value='$SongID'>
-			     <input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>		     
-			     <input type='hidden' name='Song' value='$Song'>
-			     <div style='align:right'><input type='Submit' value='Download !'></form></div>
-			     </div><br />";
+$Cover = "http://beta.grooveshark.com/static/amazonart/$Cover";
 }
-elseif ($Song != NULL)
-{
-echo "<br /><div style='padding-left:10px;padding-bottom:10px;'><form action='' method='POST'>Artist: $Artist - Album: $Album - Song: $Song 
-			     <input type='hidden' name='download' value='1'>
-			     <input type='hidden' name='SongID' value='$SongID'>
-			     <input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>
-			     <div style=';align:right'><input  type='Submit' value='Download'></div></form></div>";
+else {
+$Cover = "images/nocover.jpg";
+}
+echo"
+<li class='withimage'>
+<a class='noeffect' href='javascript:document.getElementById(\"$SongID\").style.visibility = \"visible\";document.getElementById(\"$SongID\").style.display = \"block\"'>
+<img src='$Cover'/>
+<span class='name'>$Song - $Artist</span>
+<span class='comment'>$Album</span>Test
+<span class='arrow'></span></a></li>
+<div id='$SongID' style='visibility:hidden;display:none;'>
+<a href='javascript:document.getElementById(\"$SongID\").style.visibility = \"hidden\";document.getElementById(\"$SongID\").style.display = \"none\"'>
+<div style='background:rgba(0,0,0,0.9);position:absolute;width:100%;height:91px;margin-top:-91px;z-index:1;'>
+<center>
+<form action='' method='POST'> 
+<input type='hidden' name='download' value='1'>
+<input type='hidden' name='DownloadName' value='$Artist - $Album - $Song'>
+<input type='hidden' name='SongID' value='$SongID'>			
+<input type='hidden' name='Song' value='$Song'>
+<input type='submit' style='margin-top:20px;' value='Download'>
+</form>
+<form action='' method='POST'> 
+<input type='hidden' name='ArtistSearch' value='1'>
+<input type='hidden' name='ArtistID' value='$ArtistID'>		     
+<input type='hidden' name='Artist' value='$Artist'>
+<input type='Submit' value='More Songs from $Artist'></form>
+</center>
+</div>
+</a>
+</div>
+";
 }
 $i++;
 }
+echo "</ul></body>";
+}
+elseif ($_GET['settings'] == '1')
+{
+echo "<form method='post' action=''>
+<span class='graytitle'>settings</span>
+<ul class='pageitem'>
+<li class='smallfield'><span class='name'>results</span><input name='results' placeholder='$results' type='text'/></li>
+<input type='hidden' name='settings' value='apply'/>
+<li class='button'><input type='submit' value='apply'/></li>
+</ul>
+</form>";
+}
+elseif ($ID != '') {
+$Name = $_GET['name'];
+echo "<span class='graytitle'>$Name</span>
+<ul class='pageitem'>
+<li class='menu'><a href=''>
+<img alt='list' src='thumbs/plugin.png' />
+<span class='name'>Download</span>
+<span class='arrow'></span></a></li>
+</ul>";
 }
 elseif ($_POST['search'] == false OR $_POST['search'] == NULL OR $_POST['ArtistSearch'] == false)
 {
-echo '<form method="POST" action="">
-<!-- Just for fun -->
-<center style="padding:40px;"><div style="padding-bottom:5px;"><input type="text" name="searchvalue" x-webkit-speech />
-<input type="hidden" name="search" value="1">
-<input type="Submit" value="Search !"></div><br />
-<a href="?rm=1">DELETE:</a>
-</center>';
+echo "<div class='searchbox'>
+<form action='' method='post'>
+<fieldset><input id='search' name='searchvalue' placeholder='search' type='text' x-webkit-speech/>
+<input id='submit' type='hidden' /></fieldset>
+<input type='hidden' name='search' value='1'>
+</form>
+</div>";
 }
 else
 {
 echo "<pre> Sorry, not found </pre>";
 }
 ?>
-</section>
-<footer>
-<p><small style="padding-left:3px;font-family:Calligraffitti; font-size:12pt;">
-Coded by Check in PHP. Created by George Stephanos.
+</div>
+<div id='footer'>
+Coded by Check in PHP. Styled by Loewe1000. Created by George Stephanos.
 <a href="http://www.groove-dl.co.cc/"> JTR's Grooveshark Downloader </a>
-</small>
-</p>
-</footer>
+</div>
 </body>
 </html>

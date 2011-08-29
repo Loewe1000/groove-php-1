@@ -1,7 +1,7 @@
 # Groove-PHP
 
 1. This is a ported Version of groove-dl to PHP by Check.
-Thx Loewe for a wondefull Design :D
+Thx Loewe for a wondeful Design :D
    * groove-dl : http://github.com/jacktheripper51/groove-dl
 2. Requirement for pc:
    * php 

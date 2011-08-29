@@ -19,7 +19,7 @@ Front end and Design for this Version came from Loewe :D
    * php
 4. Screenshot:
 1:
-https://github.com/check/groove-php/raw/master/screenshot/loewe.png
+(https://github.com/check/groove-php/raw/master/screenshot/loewe.png)
 2:
 https://github.com/check/groove-php/raw/master/screenshot/loewe2.png
 3:

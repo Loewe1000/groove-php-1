@@ -1,7 +1,11 @@
 # Groove-PHP
 
+Previous Version:: 0.0.1
+Version: 0.1 -  Master
+
+Front end and Design for this Version came from Loewe :D 
+
 1. This is a ported Version of groove-dl to PHP by Check.
-Thx Loewe for a wondeful Design :D
    * groove-dl : http://github.com/jacktheripper51/groove-dl
 2. Requirement for pc:
    * php 
@@ -14,5 +18,14 @@ Thx Loewe for a wondeful Design :D
    * lighttpd
    * php
 4. Screenshot:
+1:
+https://github.com/check/groove-php/raw/master/screenshot/loewe.png
+2:
+https://github.com/check/groove-php/raw/master/screenshot/loewe2.png
+3:
+https://github.com/check/groove-php/raw/master/screenshot/loewe3.png
 
-![Groove php v0.0.1](https://raw.github.com/check/groove-php/master/screenshot/screenshot.PNG)
+
+
+Old:
+https://raw.github.com/check/groove-php/master/screenshot/screenshot.PNG
